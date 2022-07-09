@@ -4,6 +4,7 @@ const routeOptions = [
     { path: '/', name: 'Index' },
     { path: '/game/pvc', name: 'PlayerVsComputer' },
     { path: '/game/cvc', name: 'ComputerVsComputer' },
+    { path: '/statistics', name: 'Statistics' },
 ];
 
 const routes = routeOptions.map(route => {

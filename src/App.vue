@@ -1,6 +1,16 @@
 <template>
-  <router-view/>
+  <div class="flex flex-col items-center justify-center">
+    <navigation></navigation>
+    
+    <div class="mt-32">
+      <router-view/>
+    </div>
+  </div>
 </template>
+
+<script setup>
+import Navigation from './components/core/Navigation.vue';
+</script>
 
 <style>
 body {
