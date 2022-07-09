@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center justify-center">
     <navigation></navigation>
     
-    <div class="mt-32">
+    <div class="mt-24">
       <router-view/>
     </div>
   </div>
