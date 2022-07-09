@@ -1,7 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
 const routeOptions = [
-    { path: '/', name: 'Index' }
+    { path: '/', name: 'Index' },
+    { path: '/game/pvc', name: 'PlayerVsComputer' },
+    { path: '/game/cvc', name: 'ComputerVsComputer' },
 ];
 
 const routes = routeOptions.map(route => {
