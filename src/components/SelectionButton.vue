@@ -1,5 +1,5 @@
 <template>
-    <button class="w-24 h-24 rounded-full border-4 border-white transition delay-100 scale-100 hover:scale-125">
+    <button class="w-24 h-24 rounded-full border-4 border-white transition delay-100 scale-100 hover:scale-125 backdrop-blur-md bg-white/20">
         <span class="text-4xl">{{ emoji }}</span>
     </button>
 </template>

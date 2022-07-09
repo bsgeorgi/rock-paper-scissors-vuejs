@@ -1,5 +1,5 @@
 <template>
-    <button class="lined transition-opacity duration-300 ease-out opacity-75 hover:opacity-100">
+    <button class="lined transition-opacity duration-300 ease-out opacity-75 hover:opacity-100 disabled:bg-gray-500">
         <slot></slot>
     </button>
 </template>
