@@ -5,11 +5,11 @@
             <span>:</span>
             <span>{{ secondPlayerScore ?? 0 }}</span>
         </div>
-        <div class="absolute -mt-16 -ml-20 font-bold backdrop-blur-md bg-white/30 px-4 py-2 w-28 text-white">
-            <span>{{ props.mode == 'pvc' ? 'Player' : 'Computer' }}</span>
+        <div class="absolute -mt-16 -ml-24 font-bold backdrop-blur-md bg-white/30 px-4 py-2 w-32 text-white">
+            <span>{{ firstPlayerName ?? (props.mode == 'pvc' ? 'Player' : 'Computer') }}</span>
         </div>
-        <div class="absolute -mt-16 ml-44 font-bold backdrop-blur-md bg-white/30 px-4 py-2 w-28 text-white">
-            <span>Computer</span>
+        <div class="absolute -mt-16 ml-44 font-bold backdrop-blur-md bg-white/30 px-4 py-2 w-32 text-white">
+            <span>{{ secondPlayerName ?? 'Computer' }}</span>
         </div>
     </div>
 </template>
@@ -18,6 +18,8 @@
 const props = defineProps({
     mode: String,
     firstPlayerScore: Number,
-    secondPlayerScore: Number
+    secondPlayerScore: Number,
+    firstPlayerName: String,
+    secondPlayerName: String
 });
 </script>

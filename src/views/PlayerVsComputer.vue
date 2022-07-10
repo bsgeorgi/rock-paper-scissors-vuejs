@@ -9,7 +9,7 @@
         <div v-if="!state.playInProgress">
             <div class="flex space-x-6">
                 <selection-button
-                    v-for="selection in possibleSelections"
+                    v-for="selection in possibleChoices"
                     :key="selection"
                     :selection=selection
                     @click.prevent="state.playerSelection=selection"
@@ -18,20 +18,18 @@
             </div>
 
             <div class="mt-16">
-                <button-outline v-if="Math.abs(gameState.playerScore - gameState.computerScore) >= 2" @click.prevent="reset">Reset game</button-outline>
-            
+                <button-outline v-if="hasGameFinished" @click.prevent="reset">Reset game</button-outline>
                 <button-outline v-else @click.prevent="play" :disabled="state.playerSelection === ''">Play</button-outline>
             </div>       
         </div>
 
         <play-animation-board v-else></play-animation-board>
     </div>
-
-
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
+import playerVsComputerMode from './../composables/playerVsComputerMode';
 import game from './../composables/game';
 
 import SelectionButton from '../components/SelectionButton.vue';
@@ -44,13 +42,20 @@ const state = reactive({
     playerSelection: ''
 });
 
-const { possibleSelections, gameState, resetGame, playGame } = game();
+const { gameState, resetGame, playGame } = playerVsComputerMode();
+const { possibleChoices } = game();
 
 const reset = () => {
     state.playInProgress = false;
     state.playerSelection = '';
     resetGame();
 };
+
+const hasGameFinished = computed(() => {
+    return ((gameState.playerScore + gameState.computerScore) >= 3 && gameState.playerScore > gameState.computerScore
+            || gameState.computerScore > gameState.playerScore) ||
+    Math.abs(gameState.playerScore - gameState.computerScore) >= 2;
+});
 
 const play = () => {
     state.message = '';
