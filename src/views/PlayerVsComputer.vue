@@ -1,6 +1,10 @@
 <template>
     <div class="flex flex-col items-center justify-center space-y-16">
-        <score-board mode="pvc" :firstPlayerScore="gameState.playerScore" :secondPlayerScore="gameState.computerScore"></score-board>
+        <score-board
+            mode="pvc"
+            :firstPlayerScore="gameState.firstPlayerScore"
+            :secondPlayerScore="gameState.secondPlayerScore">
+        </score-board>
 
         <div v-show="gameState.message.length > 0">
             <h5 class="text-white text-3xl font-bold">{{ gameState.message }}</h5>
@@ -29,7 +33,7 @@
 
 <script setup>
 import { reactive, computed } from 'vue';
-import playerVsComputerMode from './../composables/playerVsComputerMode';
+import helper from './../composables/helper';
 import game from './../composables/game';
 
 import SelectionButton from '../components/SelectionButton.vue';
@@ -42,8 +46,8 @@ const state = reactive({
     playerSelection: ''
 });
 
-const { gameState, resetGame, playGame } = playerVsComputerMode();
-const { possibleChoices } = game();
+const { gameState, resetGame, playGame } = game();
+const { possibleChoices } = helper();
 
 const reset = () => {
     state.playInProgress = false;
@@ -52,9 +56,12 @@ const reset = () => {
 };
 
 const hasGameFinished = computed(() => {
-    return ((gameState.playerScore + gameState.computerScore) >= 3 && gameState.playerScore > gameState.computerScore
-            || gameState.computerScore > gameState.playerScore) ||
-    Math.abs(gameState.playerScore - gameState.computerScore) >= 2;
+    const totalGameRounds = gameState.firstPlayerScore + gameState.secondPlayerScore;
+    const isFirstPlayerWinning = gameState.firstPlayerScore > gameState.secondPlayerScore;
+    const isSecondPlayerWinning = gameState.secondPlayerScore > gameState.firstPlayerScore;
+    const differenceBiggerThanTwo = Math.abs(gameState.firstPlayerScore - gameState.secondPlayerScore) >= 2;
+
+    return ((totalGameRounds >= 3) && (isFirstPlayerWinning || isSecondPlayerWinning)) || differenceBiggerThanTwo;
 });
 
 const play = () => {

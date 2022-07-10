@@ -1,55 +1,67 @@
+import { reactive, computed, readonly } from 'vue';
+import helper from './helper';
+
 export default () => {
-    const possibleChoices = [
-        'r',
-        'p',
-        's'
-    ];
+    const hasGameFinished = () => {
+        const totalGameRounds = gameState.firstPlayerScore + gameState.secondPlayerScore;
+        const isFirstPlayerWinning = gameState.firstPlayerScore > gameState.secondPlayerScore;
+        const isSecondPlayerWinning = gameState.secondPlayerScore > gameState.firstPlayerScore;
+        const differenceBiggerThanTwo = Math.abs(gameState.firstPlayerScore - gameState.secondPlayerScore) >= 2;
 
-    const choicesWordDict = {
-        'r': 'Rock',
-        'p': 'Paper',
-        's': 'Scissors'
-    };
+        const res = ((totalGameRounds >= 3) && (isFirstPlayerWinning || isSecondPlayerWinning)) || differenceBiggerThanTwo;;
 
-    const generateComputerChoice = () => {
-        return possibleChoices[Math.floor(Math.random() * possibleChoices.length)];
-    };
-
-    const choiceToWord = (c) => {
-        if (!choicesWordDict.hasOwnProperty(c)) {
-            return null;
-        }
-        return choicesWordDict[c];
-    };
-
-    const getRoundOutcome = (combination) => {
-        var outcome = '';
-
-        switch(combination) {
-            case 'rs':
-            case 'pr':
-            case 'sp':
-                outcome = 'w';
-                break;
-            
-            case 'rr':
-            case 'pp':
-            case 'ss':
-                outcome = 't'; // tie
-                break;
+        console.log(totalGameRounds, isFirstPlayerWinning, isSecondPlayerWinning, differenceBiggerThanTwo, res)
     
-            default:
-                outcome = 'l';
-                break;
-        }
+        return ((totalGameRounds >= 3) && (isFirstPlayerWinning || isSecondPlayerWinning)) || differenceBiggerThanTwo;
+    };
 
-        return outcome;
-    };    
-
-    return {
-        possibleChoices,
+    const {
         generateComputerChoice,
         choiceToWord,
         getRoundOutcome
+    } = helper();
+
+    const gameState = reactive({
+        firstPlayerScore: 0,
+        secondPlayerScore: 0,
+        firstPlayerWonLastRound: null,
+        message: '',
+        totalRounds: 0
+    });
+
+    const playGame = (firstPlayerChoice, firstPlayerName = 'You', secondPlayerName = 'Computer') => {
+        const secondPlayerChoice = generateComputerChoice();
+        const outcome = getRoundOutcome(firstPlayerChoice + secondPlayerChoice);
+
+        const firstPlayerChoiceWord = choiceToWord(firstPlayerChoice);
+        const secondPlayerChoiceWord = choiceToWord(secondPlayerChoice);
+
+        if (outcome === 'w') {
+            gameState.message = `${firstPlayerName} won! ${firstPlayerChoiceWord} beats ${secondPlayerChoiceWord.toLowerCase()}. Whoop whoop 🎉`;
+            gameState.firstPlayerScore += 1;
+            gameState.firstPlayerWonLastRound = true;
+        } else if (outcome == 't') {
+            gameState.message = `Draw! Both players have chosen ${firstPlayerChoiceWord.toLowerCase()}. Great minds think alike 🤔`; 
+        } else {
+            gameState.message = `${secondPlayerName} won! ${secondPlayerChoiceWord} beats ${firstPlayerChoiceWord.toLowerCase()}. Better luck next time 😥`;
+            gameState.secondPlayerScore += 1;
+            gameState.firstPlayerWonLastRound = false;
+        }
+
+        ++gameState.totalRounds;
+    };
+
+    const resetGame = () => {
+        gameState.firstPlayerScore = gameState.secondPlayerScore = 0;
+        gameState.firstPlayerWonLastRound = null;
+        gameState.message = '';
+        gameState.totalRounds = 0;
+    };
+
+    return {
+        gameState: readonly(gameState),
+        playGame,
+        resetGame,
+        hasGameFinished
     };
 };
