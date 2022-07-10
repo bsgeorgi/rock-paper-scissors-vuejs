@@ -3,6 +3,7 @@
         <score-board
             mode="pvc"
             :firstPlayerScore="gameState.firstPlayerScore"
+            :draws="gameState.draws"
             :secondPlayerScore="gameState.secondPlayerScore">
         </score-board>
 

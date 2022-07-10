@@ -4,6 +4,7 @@
             mode="cvc"
             :firstPlayerScore="gameState.firstPlayerScore"
             :secondPlayerScore="gameState.secondPlayerScore"
+            :draws="gameState.draws"
             :firstPlayerName=state.firstPlayerName
             :secondPlayerName=state.secondPlayerName>
         </score-board>
@@ -76,7 +77,6 @@ const reset = () => {
 const toggleAnimation = () => {
     state.roundPlayInProgress = !state.roundPlayInProgress;
 }
-
 
 const play = () => {
     toggleAnimation();
